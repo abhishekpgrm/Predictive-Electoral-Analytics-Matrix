@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios instance — uses Vite proxy in dev, direct URL in production
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' }
 });
