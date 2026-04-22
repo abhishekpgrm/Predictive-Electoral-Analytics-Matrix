@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+console.log('API Base URL:', import.meta.env.VITE_API_URL || '/api');
+
 // Axios instance — uses Vite proxy in dev, direct URL in production
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
-  timeout: 10000,
+  timeout: 60000, // Increased to 60 seconds to handle Render cold starts
   headers: { 'Content-Type': 'application/json' }
 });
 
