@@ -129,8 +129,10 @@ def health():
 
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5001))
     print("\n🚀 PoW Predictor ML API")
+    print(f"   Listening on port {port}")
     print("   POST /predict       — Single candidate prediction")
     print("   POST /batch-predict — Batch prediction")
     print("   GET  /health        — Health check\n")
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)
