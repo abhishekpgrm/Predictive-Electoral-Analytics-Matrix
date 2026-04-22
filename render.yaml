@@ -1,0 +1,30 @@
+services:
+  # ── Python ML API ──
+  - type: web
+    name: pow-ml-api
+    env: python
+    rootDir: ml-api
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+  # ── Node.js Backend ──
+  - type: web
+    name: pow-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: FLASK_URL
+        # This automatically pulls the live URL from the ML API service
+        fromService:
+          type: web
+          name: pow-ml-api
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: MONGO_URI
+        sync: false # You will enter this manually in the Render dashboard
+      - key: FRONTEND_URL
+        sync: false # You will enter this manually in the Render dashboard
