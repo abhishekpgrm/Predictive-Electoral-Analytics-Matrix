@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Sentiment = require('../models/Sentiment');
 const { isDBConnected } = require('../config/db');
 const { sentiments: dummySentiments } = require('../data/dummyData');
@@ -8,7 +9,17 @@ exports.getSentiments = async (req, res, next) => {
     const { candidate_id } = req.query;
 
     if (isDBConnected()) {
-      const filter = candidate_id ? { candidate: candidate_id } : {};
+      const isObjectId = mongoose.Types.ObjectId.isValid(candidate_id);
+      let filter = {};
+      
+      if (candidate_id) {
+        if (isObjectId) {
+          filter = { candidate: candidate_id };
+        } else {
+          filter = { candidate_id: candidate_id };
+        }
+      }
+      
       const sentiments = await Sentiment.find(filter);
       return res.json({ success: true, data: sentiments });
     }
@@ -56,8 +67,11 @@ exports.updateSentiment = async (req, res, next) => {
     const { candidate_id, positive, negative, neutral } = req.body;
 
     if (isDBConnected()) {
+      const isObjectId = mongoose.Types.ObjectId.isValid(candidate_id);
+      const query = isObjectId ? { candidate: candidate_id } : { candidate_id: candidate_id };
+      
       const sentiment = await Sentiment.findOneAndUpdate(
-        { candidate: candidate_id },
+        query,
         { positive, negative, neutral },
         { new: true, upsert: true }
       );
