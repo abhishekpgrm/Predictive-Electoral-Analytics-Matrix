@@ -13,12 +13,16 @@ function CandidateCard({ candidate, sentiment, selected, onToggle }) {
   const total = sentiment ? (sentiment.positive + sentiment.negative + sentiment.neutral) : 100;
 
   const formatAssets = (value) => {
+    if (value == null) return '₹0';
+    if (typeof value === 'string') return value;
     if (value >= 10000000) return `₹${(value / 10000000).toFixed(1)} Cr`;
     if (value >= 100000) return `₹${(value / 100000).toFixed(1)} L`;
     return `₹${value.toLocaleString('en-IN')}`;
   };
-
+ 
   const formatVotes = (value) => {
+    if (value == null) return '0';
+    if (typeof value === 'string') return value;
     if (value >= 100000) return `${(value / 100000).toFixed(1)}L`;
     if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
     return value.toLocaleString('en-IN');
