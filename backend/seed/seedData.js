@@ -3,6 +3,7 @@
  * Run: npm run seed (or: node seed/seedData.js)
  */
 
+require('dotenv').config({ path: __dirname + '/../.env' });
 const mongoose = require('mongoose');
 const Candidate = require('../models/Candidate');
 const Demographics = require('../models/Demographics');
