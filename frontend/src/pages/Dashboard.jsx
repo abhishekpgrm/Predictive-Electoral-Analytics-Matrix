@@ -49,7 +49,7 @@ function Dashboard() {
 
   // Get sentiment for a candidate
   const getSentiment = (candidateId) => {
-    return sentiments.find(s => s.candidate_id === candidateId);
+    return sentiments.find(s => s.candidate === candidateId || s.candidate_id === candidateId);
   };
 
   // Compute stats
@@ -65,8 +65,11 @@ function Dashboard() {
   const avgSentiment = sentiments.length > 0
     ? Math.round(
         sentiments.reduce((sum, s) => {
-          const total = s.positive + s.negative + s.neutral;
-          return sum + (total > 0 ? (s.positive / total) * 100 : 50);
+          const pos = s.positive || 0;
+          const neg = s.negative || 0;
+          const neu = s.neutral || 0;
+          const total = pos + neg + neu;
+          return sum + (total > 0 ? (pos / total) * 100 : 50);
         }, 0) / sentiments.length
       )
     : 0;
